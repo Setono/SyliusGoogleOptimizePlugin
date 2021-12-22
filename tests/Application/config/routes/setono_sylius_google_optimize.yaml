@@ -1,0 +1,2 @@
+setono_sylius_google_optimize:
+    resource: "@SetonoSyliusGoogleOptimizePlugin/Resources/config/routes.yaml"
