@@ -1,0 +1,28 @@
+sylius_grid:
+    grids:
+        setono_sylius_google_optimize_admin_experiment:
+            driver:
+                options:
+                    class: "%setono_sylius_google_optimize.model.experiment.class%"
+            limits: [100, 250, 500, 1000]
+            fields:
+                code:
+                    type: string
+                    label: setono_sylius_google_optimize.ui.code
+                googleExperimentId:
+                    type: string
+                    label: setono_sylius_google_optimize.ui.google_experiment_id
+            filters:
+                search:
+                    type: string
+                    label: sylius.ui.search
+                    options:
+                        fields: [ googleExperimentId, code ]
+            actions:
+                main:
+                    create:
+                        type: create
+                item:
+                    delete:
+                        type: delete
+

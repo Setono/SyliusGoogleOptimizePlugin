@@ -1,1 +1,13 @@
-# TODO Add your admin routes here
+setono_sylius_google_optimize_admin_experiment:
+    resource: |
+        section: admin
+        alias: setono_sylius_google_optimize.experiment
+        templates: "@SyliusAdmin\\Crud"
+        redirect: update
+        permission: true
+        grid: setono_sylius_google_optimize_admin_experiment
+        vars:
+            all:
+                header: setono_sylius_google_optimize.ui.experiment_header
+                subheader: setono_sylius_google_optimize.ui.experiment_subheader
+    type: sylius.resource

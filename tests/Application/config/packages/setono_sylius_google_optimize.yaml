@@ -1,2 +1,2 @@
-setono_sylius_google_optimize:
-    option: Option value
+imports:
+    - { resource: "@SetonoSyliusGoogleOptimizePlugin/Resources/config/app/config.yaml" }

@@ -1,0 +1,2 @@
+imports:
+    - { resource: "@SetonoSyliusGoogleOptimizePlugin/Resources/config/grids/setono_sylius_google_optimize_admin_experiment.yaml" }

@@ -1,0 +1,12 @@
+setono_sylius_google_optimize:
+    menu:
+        admin:
+            main:
+                configuration:
+                    experiments: Google Optimize Experiments
+    ui:
+        code: Code
+        experiment: Experiment
+        experiments: Experiments
+        experiment_header: Experiments
+        experiment_subheader: Manage your Google Optimize experiments
