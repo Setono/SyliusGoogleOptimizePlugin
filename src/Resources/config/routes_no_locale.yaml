@@ -7,4 +7,4 @@ setono_sylius_google_optimize_shop:
 
 setono_sylius_google_optimize_admin:
     resource: "@SetonoSyliusGoogleOptimizePlugin/Resources/config/routes/admin.yaml"
-    prefix: /admin
+    prefix: /admin/google-optimize

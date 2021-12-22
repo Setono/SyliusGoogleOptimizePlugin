@@ -1,4 +1,14 @@
 setono_sylius_google_optimize:
+    form:
+        experiment:
+            code_placeholder: E.g. product_page_layout
+            google_experiment_id: Google experiment id
+            google_experiment_id_placeholder: E.g. eXHDuwSTRYOyYPXW7QWINg
+            variants: Variants
+        variant:
+            position: Position / index
+        variant_collection:
+            add_variant: Add variant
     menu:
         admin:
             main:
@@ -10,3 +20,7 @@ setono_sylius_google_optimize:
         experiments: Experiments
         experiment_header: Experiments
         experiment_subheader: Manage your Google Optimize experiments
+        google_experiment_id: Google experiment id
+        no_winner: No winner :-(
+        pick_winner: Pick winner
+        variants: Variants

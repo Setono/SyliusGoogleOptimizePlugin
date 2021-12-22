@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="setono_sylius_google_optimize.form.type.experiment.validation_groups" type="collection">
+            <parameter>setono_sylius_google_optimize</parameter>
+        </parameter>
+
+        <parameter key="setono_sylius_google_optimize.form.type.variant.validation_groups" type="collection">
+            <parameter>setono_sylius_google_optimize</parameter>
+        </parameter>
+    </parameters>
+    <services>
+        <service id="setono_sylius_google_optimize.form.type.experiment"
+                 class="Setono\SyliusGoogleOptimizePlugin\Form\Type\ExperimentType">
+            <argument>%setono_sylius_google_optimize.model.experiment.class%</argument>
+            <argument>%setono_sylius_google_optimize.form.type.experiment.validation_groups%</argument>
+
+            <tag name="form.type"/>
+        </service>
+
+        <service id="setono_sylius_google_optimize.form.type.variant"
+                 class="Setono\SyliusGoogleOptimizePlugin\Form\Type\VariantType">
+            <argument>%setono_sylius_google_optimize.model.variant.class%</argument>
+            <argument>%setono_sylius_google_optimize.form.type.variant.validation_groups%</argument>
+
+            <tag name="form.type"/>
+        </service>
+
+        <service id="setono_sylius_google_optimize.form.type.variant_collection"
+                 class="Setono\SyliusGoogleOptimizePlugin\Form\Type\VariantCollectionType">
+            <tag name="form.type"/>
+        </service>
+    </services>
+</container>

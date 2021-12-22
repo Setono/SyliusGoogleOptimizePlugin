@@ -7,8 +7,20 @@
             <generator strategy="AUTO"/>
         </id>
 
-        <field name="code" type="string" unique="true" />
-        <field name="googleExperimentId" type="string" unique="true" />
-        <field name="variants" type="integer" />
+        <field name="code" type="string" unique="true"/>
+        <field name="googleExperimentId" type="string" unique="true"/>
+        <field name="createdAt" type="datetime"/>
+        <field name="endedAt" type="datetime" nullable="true"/>
+
+        <one-to-one field="winner" target-entity="Setono\SyliusGoogleOptimizePlugin\Model\VariantInterface">
+            <join-column name="winner_id" nullable="true" on-delete="SET NULL"/>
+        </one-to-one>
+
+        <one-to-many field="variants" target-entity="Setono\SyliusGoogleOptimizePlugin\Model\VariantInterface"
+                     mapped-by="experiment" fetch="EAGER" orphan-removal="true">
+            <cascade>
+                <cascade-all/>
+            </cascade>
+        </one-to-many>
     </mapped-superclass>
 </doctrine-mapping>

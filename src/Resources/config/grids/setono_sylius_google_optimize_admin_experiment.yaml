@@ -1,4 +1,7 @@
 sylius_grid:
+    templates:
+        action:
+            pick_winner: "@SetonoSyliusGoogleOptimizePlugin/admin/grid/action/pick_winner.html.twig"
     grids:
         setono_sylius_google_optimize_admin_experiment:
             driver:
@@ -12,6 +15,12 @@ sylius_grid:
                 googleExperimentId:
                     type: string
                     label: setono_sylius_google_optimize.ui.google_experiment_id
+                variants:
+                    type: twig
+                    label: setono_sylius_google_optimize.ui.variants
+                    path: .
+                    options:
+                        template: "@SetonoSyliusGoogleOptimizePlugin/admin/grid/field/variants.html.twig"
             filters:
                 search:
                     type: string
@@ -25,4 +34,11 @@ sylius_grid:
                 item:
                     delete:
                         type: delete
+                    pick_winner:
+                        type: pick_winner
+                        label: setono_sylius_google_optimize.ui.pick_winner
+                        options:
+                            experiment: resource.id
+                            variants: resource.variants
+                            hidden: resource.hasWinner
 

@@ -2,12 +2,27 @@ setono_sylius_google_optimize_admin_experiment:
     resource: |
         section: admin
         alias: setono_sylius_google_optimize.experiment
+        except: ['update']
         templates: "@SyliusAdmin\\Crud"
-        redirect: update
+        redirect: index
         permission: true
         grid: setono_sylius_google_optimize_admin_experiment
         vars:
             all:
                 header: setono_sylius_google_optimize.ui.experiment_header
                 subheader: setono_sylius_google_optimize.ui.experiment_subheader
+                templates:
+                    form: "@SetonoSyliusGoogleOptimizePlugin/admin/experiment/_form.html.twig"
     type: sylius.resource
+
+setono_sylius_google_optimize_admin_pick_winner:
+    path: /experiments/pick-winner/{experimentId}/{variantId}
+    methods: [GET]
+    defaults:
+        _controller: setono_sylius_google_optimize.controller.action.pick_winner
+        _sylius:
+            section: admin
+            permission: true
+    requirements:
+        experimentId: \d+
+        variantId: \d+

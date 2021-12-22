@@ -1,0 +1,16 @@
+{% import '@SyliusUi/Macro/buttons.html.twig' as buttons %}
+
+{% if not options.hidden %}
+    <div class="ui labeled icon floating dropdown link button teal">
+        <i class="trophy icon"></i>
+        <span class="text">{{ 'setono_sylius_google_optimize.ui.pick_winner'|trans }}</span>
+        <div class="menu">
+            {% for variant in options.variants %}
+                {% set link = {'url': path('setono_sylius_google_optimize_admin_pick_winner', {'experimentId': options.experiment, 'variantId': variant.id}), 'label': variant} %}
+                {% include '@SyliusUi/Grid/Action/_link.html.twig' %}
+            {% endfor %}
+            {% set link = {'url': 'https://www.google.com', 'label': 'setono_sylius_google_optimize.ui.no_winner'} %}
+            {% include '@SyliusUi/Grid/Action/_link.html.twig' %}
+        </div>
+    </div>
+{% endif %}

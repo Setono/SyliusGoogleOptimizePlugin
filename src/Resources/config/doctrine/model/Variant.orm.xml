@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <mapped-superclass name="Setono\SyliusGoogleOptimizePlugin\Model\Variant"
+                       table="setono_sylius_google_optimize__variant">
+        <id name="id" type="integer">
+            <generator strategy="AUTO"/>
+        </id>
+
+        <field name="code" type="string"/>
+        <field name="position" type="integer"/>
+
+        <many-to-one target-entity="Setono\SyliusGoogleOptimizePlugin\Model\ExperimentInterface" field="experiment" inversed-by="variants">
+            <join-column name="experiment_id" referenced-column-name="id" nullable="false" on-delete="CASCADE" />
+        </many-to-one>
+
+        <unique-constraints>
+            <unique-constraint columns="code,experiment_id"/>
+        </unique-constraints>
+    </mapped-superclass>
+</doctrine-mapping>

@@ -1,0 +1,15 @@
+{{ form_errors(form) }}
+<div class="ui two column stackable grid">
+    <div class="column">
+        <div class="ui segment">
+            {{ form_row(form.code) }}
+            {{ form_row(form.googleExperimentId) }}
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="ui segment">
+            {{ form_row(form.variants) }}
+        </div>
+    </div>
+</div>

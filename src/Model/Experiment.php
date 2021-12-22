@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 class Experiment implements ExperimentInterface
 {
     protected ?int $id = null;
@@ -12,7 +15,20 @@ class Experiment implements ExperimentInterface
 
     protected ?string $googleExperimentId = null;
 
-    protected ?int $variants = null;
+    protected ?VariantInterface $winner = null;
+
+    /** @var Collection<array-key, VariantInterface> */
+    protected Collection $variants;
+
+    protected \DateTimeInterface $createdAt;
+
+    protected ?\DateTimeInterface $endedAt = null;
+
+    public function __construct()
+    {
+        $this->variants = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function __toString(): string
     {
@@ -44,13 +60,60 @@ class Experiment implements ExperimentInterface
         $this->googleExperimentId = $googleExperimentId;
     }
 
-    public function getVariants(): ?int
+    public function hasWinner(): bool
+    {
+        return null !== $this->winner;
+    }
+
+    public function getWinner(): ?VariantInterface
+    {
+        return $this->winner;
+    }
+
+    public function setWinner(?VariantInterface $winner): void
+    {
+        $this->winner = $winner;
+        $this->endedAt = new \DateTimeImmutable();
+    }
+
+    public function getVariants(): Collection
     {
         return $this->variants;
     }
 
-    public function setVariants(?int $variants): void
+    public function addVariant(VariantInterface $variant): void
     {
-        $this->variants = $variants;
+        if (!$this->hasVariant($variant)) {
+            $this->variants->add($variant);
+            $variant->setExperiment($this);
+        }
+    }
+
+    public function removeVariant(VariantInterface $variant): void
+    {
+        if ($this->hasVariant($variant)) {
+            $this->variants->removeElement($variant);
+            $variant->setExperiment(null);
+        }
+    }
+
+    public function hasVariant(VariantInterface $variant): bool
+    {
+        return $this->variants->contains($variant);
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getEndedAt(): ?\DateTimeInterface
+    {
+        return $this->endedAt;
+    }
+
+    public function setEndedAt(?\DateTimeInterface $endedAt): void
+    {
+        $this->endedAt = $endedAt;
     }
 }

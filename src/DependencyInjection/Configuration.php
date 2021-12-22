@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\DependencyInjection;
 
+use Setono\SyliusGoogleOptimizePlugin\Form\Type\ExperimentType;
+use Setono\SyliusGoogleOptimizePlugin\Form\Type\VariantType;
 use Setono\SyliusGoogleOptimizePlugin\Model\Experiment;
+use Setono\SyliusGoogleOptimizePlugin\Model\Variant;
 use Sylius\Bundle\ResourceBundle\Controller\ResourceController;
-use Sylius\Bundle\ResourceBundle\Form\Type\DefaultResourceType;
 use Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 use Sylius\Component\Resource\Factory\Factory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
@@ -57,7 +59,23 @@ final class Configuration implements ConfigurationInterface
                                         ->scalarNode('model')->defaultValue(Experiment::class)->cannotBeEmpty()->end()
                                         ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
                                         ->scalarNode('repository')->cannotBeEmpty()->end()
-                                        ->scalarNode('form')->defaultValue(DefaultResourceType::class)->end()
+                                        ->scalarNode('form')->defaultValue(ExperimentType::class)->end()
+                                        ->scalarNode('factory')->defaultValue(Factory::class)->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('variant')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->variableNode('options')->end()
+                                ->arrayNode('classes')
+                                    ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('model')->defaultValue(Variant::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('controller')->defaultValue(ResourceController::class)->cannotBeEmpty()->end()
+                                        ->scalarNode('repository')->cannotBeEmpty()->end()
+                                        ->scalarNode('form')->defaultValue(VariantType::class)->end()
                                         ->scalarNode('factory')->defaultValue(Factory::class)->end()
                                     ->end()
                                 ->end()
