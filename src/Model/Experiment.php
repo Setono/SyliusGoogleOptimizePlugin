@@ -107,6 +107,11 @@ class Experiment implements ExperimentInterface
         return $this->createdAt;
     }
 
+    public function hasEnded(): bool
+    {
+        return null !== $this->endedAt;
+    }
+
     public function getEndedAt(): ?\DateTimeInterface
     {
         return $this->endedAt;

@@ -4,48 +4,38 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\Twig;
 
-use Setono\SyliusGoogleOptimizePlugin\Context\ExperimentContextInterface;
+use Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface;
 use Twig\Extension\RuntimeExtensionInterface;
 
 final class Runtime implements RuntimeExtensionInterface
 {
-    private ExperimentContextInterface $experimentContext;
+    private VariantContextInterface $variantContext;
 
-    public function __construct(ExperimentContextInterface $experimentContext)
+    public function __construct(VariantContextInterface $variantContext)
     {
-        $this->experimentContext = $experimentContext;
+        $this->variantContext = $variantContext;
     }
 
     /**
      * Returns true if
-     * - the user is assigned to the original/control variant
-     * - the experiment does not exist
-     * - the experiment ended without a winner
+     * - the user is assigned to the given variant on the given experiment
+     * - the experiment ended with the given variant as a winner
      *
      * @param string $experiment Either the experiment code or the Google experiment id
+     * @param string|int|mixed $variantIdentifier Either the variant code or the position/index
      */
-    public function original(string $experiment): bool
+    public function variant(string $experiment, $variantIdentifier): bool
     {
-        if(!$this->experimentContext->hasExperiment($experiment)) {
-            return true;
+        if (!is_string($variantIdentifier) && !is_int($variantIdentifier)) {
+            throw new \InvalidArgumentException('The variant identifier must either be a string or an integer');
         }
 
-        $experimentWithAllocatedVariant = $this->experimentContext->getExperiment($experiment);
-        if($experimentWithAllocatedVariant->getVariant()->isOriginal()) {
-            return true;
+        try {
+            $variant = $this->variantContext->getVariant($experiment);
+        } catch (\InvalidArgumentException $e) {
+            return false;
         }
 
-
-    }
-
-    /**
-     * Returns true if the user is assigned to the given variant on the given experiment
-     *
-     * @param string $experiment Either the experiment code or the Google experiment id
-     * @param string|integer $variant Either the variant code or the position/index
-     */
-    public function variant(string $experiment, $variant): bool
-    {
-        $experiments = $this->experimentContext->getExperiments();
+        return $variant->getPosition() === $variantIdentifier || $variant->getCode() === $variantIdentifier;
     }
 }
