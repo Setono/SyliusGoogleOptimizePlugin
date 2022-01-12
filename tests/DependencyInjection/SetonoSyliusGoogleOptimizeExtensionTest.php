@@ -26,6 +26,6 @@ final class SetonoSyliusGoogleOptimizeExtensionTest extends AbstractExtensionTes
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('setono_sylius_google_optimize.cookie_name', 'ssgo_experiments');
+        $this->assertContainerBuilderHasParameter('setono_sylius_google_optimize.cookie_name', 'ssgo_exp');
     }
 }

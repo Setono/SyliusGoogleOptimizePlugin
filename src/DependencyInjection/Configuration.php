@@ -35,7 +35,7 @@ final class Configuration implements ConfigurationInterface
                     ->defaultValue(SyliusResourceBundle::DRIVER_DOCTRINE_ORM)
                 ->end()
                 ->scalarNode('cookie_name')
-                    ->defaultValue('ssgo_experiments')
+                    ->defaultValue('ssgo_exp')
                     ->info('This is the name of the cookie used to save experiments and their related variants. Do not change this after you have started to run experiments because it will ruin your data on running experiments')
         ;
 

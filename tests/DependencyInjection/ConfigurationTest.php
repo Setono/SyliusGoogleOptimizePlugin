@@ -35,7 +35,7 @@ final class ConfigurationTest extends TestCase
     {
         $this->assertProcessedConfigurationEquals([], [
             'driver' => SyliusResourceBundle::DRIVER_DOCTRINE_ORM,
-            'cookie_name' => 'ssgo_experiments',
+            'cookie_name' => 'ssgo_exp',
             'resources' => [
                 'experiment' => [
                     'classes' => [
