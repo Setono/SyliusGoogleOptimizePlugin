@@ -19,13 +19,6 @@ final class SetonoSyliusGoogleOptimizeExtensionTest extends AbstractExtensionTes
         ];
     }
 
-    protected function getMinimalConfiguration(): array
-    {
-        return [
-            'option' => 'option_value',
-        ];
-    }
-
     /**
      * @test
      */
@@ -33,6 +26,6 @@ final class SetonoSyliusGoogleOptimizeExtensionTest extends AbstractExtensionTes
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('setono_sylius_google_optimize.option', 'option_value');
+        $this->assertContainerBuilderHasParameter('setono_sylius_google_optimize.cookie_name', 'ssgo_experiments');
     }
 }
