@@ -16,10 +16,12 @@ final class SetonoSyliusGoogleOptimizeExtension extends AbstractResourceExtensio
         /**
          * @psalm-suppress PossiblyNullArgument
          *
-         * @var array{driver: string, resources: array<string, mixed>} $config
+         * @var array{cookie_name: string, driver: string, resources: array<string, mixed>} $config
          */
         $config = $this->processConfiguration($this->getConfiguration([], $container), $configs);
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+
+        $container->setParameter('setono_sylius_google_optimize.cookie_name', $config['cookie_name']);
 
         $this->registerResources('setono_sylius_google_optimize', $config['driver'], $config['resources'], $container);
 

@@ -81,6 +81,17 @@ class Experiment implements ExperimentInterface
         return $this->variants;
     }
 
+    public function getOriginalVariant(): VariantInterface
+    {
+        foreach ($this->getVariants() as $variant) {
+            if ($variant->getCode() === VariantInterface::CODE_ORIGINAL) {
+                return $variant;
+            }
+        }
+
+        throw new \RuntimeException('No original variant on this experiment');
+    }
+
     public function addVariant(VariantInterface $variant): void
     {
         if (!$this->hasVariant($variant)) {

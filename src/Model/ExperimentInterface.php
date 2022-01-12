@@ -20,7 +20,7 @@ interface ExperimentInterface extends ResourceInterface, CodeAwareInterface
     public function setGoogleExperimentId(?string $googleExperimentId): void;
 
     /**
-     * @psalm-assert-if-true VariantInterface $this->getWinner()
+     * @psalm-assert-if-true !null $this->getWinner()
      */
     public function hasWinner(): bool;
 
