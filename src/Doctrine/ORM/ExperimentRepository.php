@@ -20,7 +20,7 @@ class ExperimentRepository extends EntityRepository implements ExperimentReposit
 
         $res = $qb->getQuery()->getResult();
 
-        Assert::isArray($res);
+        Assert::isList($res);
         Assert::allIsInstanceOf($res, ExperimentInterface::class);
 
         return $res;

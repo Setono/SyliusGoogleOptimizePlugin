@@ -10,7 +10,7 @@ use Sylius\Component\Resource\Repository\RepositoryInterface;
 interface ExperimentRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @return array<array-key, ExperimentInterface>
+     * @return list<ExperimentInterface>
      */
     public function findAll(bool $fetchJoinVariants = true): array;
 
