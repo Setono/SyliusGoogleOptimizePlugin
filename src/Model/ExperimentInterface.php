@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\Model;
 
+use DateTimeInterface;
 use Doctrine\Common\Collections\Collection;
 use Sylius\Component\Resource\Model\CodeAwareInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -18,11 +19,19 @@ interface ExperimentInterface extends ResourceInterface, CodeAwareInterface
 
     public function setGoogleExperimentId(?string $googleExperimentId): void;
 
+    /**
+     * @psalm-assert-if-true !null $this->getWinner()
+     */
     public function hasWinner(): bool;
 
     public function getWinner(): ?VariantInterface;
 
     public function setWinner(?VariantInterface $winner): void;
+
+    /**
+     * @throws \RuntimeException if the experiment does not have an original variant
+     */
+    public function getOriginalVariant(): VariantInterface;
 
     /**
      * @psalm-return Collection<array-key, VariantInterface>
@@ -37,9 +46,14 @@ interface ExperimentInterface extends ResourceInterface, CodeAwareInterface
 
     public function hasVariant(VariantInterface $variant): bool;
 
-    public function getCreatedAt(): \DateTimeInterface;
+    public function getCreatedAt(): DateTimeInterface;
 
-    public function getEndedAt(): ?\DateTimeInterface;
+    /**
+     * @psalm-assert-if-true DateTimeInterface $this->getEndedAt()
+     */
+    public function hasEnded(): bool;
 
-    public function setEndedAt(?\DateTimeInterface $endedAt): void;
+    public function getEndedAt(): ?DateTimeInterface;
+
+    public function setEndedAt(?DateTimeInterface $endedAt): void;
 }

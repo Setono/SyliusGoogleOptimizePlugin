@@ -9,6 +9,11 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 
 interface VariantInterface extends ResourceInterface, CodeAwareInterface
 {
+    /**
+     * This represents the code for original variants, which should be a reserved code
+     */
+    public const CODE_ORIGINAL = 'original';
+
     public function __toString(): string;
 
     public function getId(): ?int;

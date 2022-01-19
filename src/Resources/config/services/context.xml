@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://symfony.com/schema/dic/services"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface"
+                 alias="setono_sylius_google_optimize.context.variant"/>
+
+        <service id="setono_sylius_google_optimize.context.variant"
+                 alias="setono_sylius_google_optimize.context.random_variant"/>
+
+        <service id="setono_sylius_google_optimize.context.random_variant"
+                 class="Setono\SyliusGoogleOptimizePlugin\Context\RandomVariantContext">
+            <argument type="service" id="setono_sylius_google_optimize.provider.experiment"/>
+        </service>
+
+        <service id="setono_sylius_google_optimize.context.cookie_based_variant"
+                 class="Setono\SyliusGoogleOptimizePlugin\Context\CookieBasedVariantContext"
+                 decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="64">
+            <argument type="service" id="setono_sylius_google_optimize.context.cookie_based_variant.inner"/>
+            <argument type="service" id="request_stack"/>
+            <argument type="service" id="setono_sylius_google_optimize.provider.experiment"/>
+            <argument>%setono_sylius_google_optimize.cookie_name%</argument>
+        </service>
+
+        <service id="setono_sylius_google_optimize.context.memory_based_variant"
+                 class="Setono\SyliusGoogleOptimizePlugin\Context\MemoryBasedVariantContext"
+                 decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="32">
+            <argument type="service" id="setono_sylius_google_optimize.context.memory_based_variant.inner"/>
+        </service>
+    </services>
+</container>
