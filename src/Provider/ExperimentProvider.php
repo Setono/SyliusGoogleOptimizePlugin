@@ -57,7 +57,7 @@ final class ExperimentProvider implements ExperimentProviderInterface
 
         $this->experiments = [];
 
-        foreach ($this->experimentRepository->findAllWithVariants() as $experiment) {
+        foreach ($this->experimentRepository->findAll() as $experiment) {
             $this->experiments[(int) $experiment->getId()] = $experiment;
             $this->experiments[(string) $experiment->getCode()] = $experiment;
             $this->experiments[(string) $experiment->getGoogleExperimentId()] = $experiment;

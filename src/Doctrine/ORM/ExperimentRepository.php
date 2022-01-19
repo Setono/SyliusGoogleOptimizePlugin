@@ -11,14 +11,14 @@ use Webmozart\Assert\Assert;
 
 class ExperimentRepository extends EntityRepository implements ExperimentRepositoryInterface
 {
-    public function findAllWithVariants(): array
+    public function findAll(bool $fetchJoinVariants = true): array
     {
-        $res = $this->createQueryBuilder('o')
-            ->select('o, v')
-            ->join('o.variants', 'v')
-            ->getQuery()
-            ->getResult()
-        ;
+        $qb = $this->createQueryBuilder('o');
+        if ($fetchJoinVariants) {
+            $qb->select('o, v')->join('o.variants', 'v');
+        }
+
+        $res = $qb->getQuery()->getResult();
 
         Assert::isArray($res);
         Assert::allIsInstanceOf($res, ExperimentInterface::class);
