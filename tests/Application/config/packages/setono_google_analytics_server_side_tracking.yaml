@@ -1,0 +1,3 @@
+setono_google_analytics_server_side_tracking:
+    properties:
+        - "UA-123456-78"

@@ -60,4 +60,7 @@ return [
     BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
     SyliusLabs\Polyfill\Symfony\Security\Bundle\SyliusLabsPolyfillSymfonySecurityBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    Setono\GoogleAnalyticsServerSideTrackingBundle\SetonoGoogleAnalyticsServerSideTrackingBundle::class => ['all' => true],
+    Setono\ClientIdBundle\SetonoClientIdBundle::class => ['all' => true],
+    Setono\ConsentBundle\SetonoConsentBundle::class => ['all' => true],
 ];

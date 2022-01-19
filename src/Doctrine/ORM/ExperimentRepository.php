@@ -26,6 +26,19 @@ class ExperimentRepository extends EntityRepository implements ExperimentReposit
         return $res;
     }
 
+    public function findRunning(): array
+    {
+        $res = $this->createQueryBuilder('o')
+            ->andWhere('o.endedAt is null')
+            ->getQuery()->getResult()
+        ;
+
+        Assert::isList($res);
+        Assert::allIsInstanceOf($res, ExperimentInterface::class);
+
+        return $res;
+    }
+
     public function findOneByCode(string $code): ?ExperimentInterface
     {
         $obj = $this->createQueryBuilder('o')
