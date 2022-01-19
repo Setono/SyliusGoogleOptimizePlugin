@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusGoogleOptimizePlugin\EventSubscriber;
 
 use Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface;
-use Setono\SyliusGoogleOptimizePlugin\Provider\ExperimentProviderInterface;
+use Setono\SyliusGoogleOptimizePlugin\Repository\ExperimentRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -13,18 +13,18 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 final class StoreExperimentsSubscriber implements EventSubscriberInterface
 {
-    private ExperimentProviderInterface $experimentProvider;
+    private ExperimentRepositoryInterface $experimentRepository;
 
     private VariantContextInterface $variantContext;
 
     private string $cookieName;
 
     public function __construct(
-        ExperimentProviderInterface $experimentProvider,
+        ExperimentRepositoryInterface $experimentRepository,
         VariantContextInterface $variantContext,
         string $cookieName
     ) {
-        $this->experimentProvider = $experimentProvider;
+        $this->experimentRepository = $experimentRepository;
         $this->variantContext = $variantContext;
         $this->cookieName = $cookieName;
     }
@@ -43,7 +43,7 @@ final class StoreExperimentsSubscriber implements EventSubscriberInterface
         }
 
         $experiments = [];
-        foreach ($this->experimentProvider->getAll() as $experiment) {
+        foreach ($this->experimentRepository->findRunning() as $experiment) {
             // we save the experiment => variant array as an <int, int> array because it has the smallest footprint in terms of size
             $experiments[(int) $experiment->getId()] = (int) $this->variantContext->getVariant((string) $experiment->getCode())->getId();
         }
