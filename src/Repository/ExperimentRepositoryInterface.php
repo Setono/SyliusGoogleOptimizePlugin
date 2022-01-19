@@ -14,6 +14,13 @@ interface ExperimentRepositoryInterface extends RepositoryInterface
      */
     public function findAll(bool $fetchJoinVariants = true): array;
 
+    /**
+     * Returns a list of running experiments
+     *
+     * @return list<ExperimentInterface>
+     */
+    public function findRunning(): array;
+
     public function findOneByCode(string $code): ?ExperimentInterface;
 
     public function findOneByCodeOrGoogleExperimentId(string $experiment): ?ExperimentInterface;

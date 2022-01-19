@@ -5,3 +5,5 @@ framework:
     secret: '%env(APP_SECRET)%'
     session:
         handler_id: ~
+    http_client:
+        enabled: true

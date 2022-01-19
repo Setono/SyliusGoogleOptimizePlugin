@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\DependencyInjection;
 
+use Setono\GoogleAnalyticsServerSideTrackingBundle\SetonoGoogleAnalyticsServerSideTrackingBundle;
 use Sylius\Bundle\ResourceBundle\DependencyInjection\Extension\AbstractResourceExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,5 +27,9 @@ final class SetonoSyliusGoogleOptimizeExtension extends AbstractResourceExtensio
         $this->registerResources('setono_sylius_google_optimize', $config['driver'], $config['resources'], $container);
 
         $loader->load('services.xml');
+
+        if (class_exists(SetonoGoogleAnalyticsServerSideTrackingBundle::class)) {
+            $loader->load('services/conditional/analytics.xml');
+        }
     }
 }
