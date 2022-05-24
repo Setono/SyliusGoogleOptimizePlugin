@@ -16,10 +16,11 @@ final class ExperimentsTest extends TestCase
     /**
      * @test
      */
-    public function it_creates_cookie(): void
+    public function it_serializes_to_json(): void
     {
         $experiments = new Experiments([new Experiment(1, 2), new Experiment(3, 4)]);
-        $cookie = $experiments->createCookie('cookie');
-        self::assertSame('{"1":2,"3":4}', $cookie->getValue());
+
+        self::assertInstanceOf(\JsonSerializable::class, $experiments);
+        self::assertSame('{"1":2,"3":4}', json_encode($experiments));
     }
 }

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\CookieManager;
 
-use Symfony\Component\HttpFoundation\Cookie;
-
 /**
  * @implements \IteratorAggregate<Experiment>
  */
@@ -27,15 +25,6 @@ final class Experiments implements \Countable, \IteratorAggregate, \JsonSerializ
     public function add(Experiment $experiment): void
     {
         $this->experiments[] = $experiment;
-    }
-
-    public function createCookie(string $name, \DateTimeInterface $expires = null): Cookie
-    {
-        if (null === $expires) {
-            $expires = (new \DateTimeImmutable())->add(new \DateInterval('P1Y'));
-        }
-
-        return Cookie::create($name, json_encode($this, \JSON_THROW_ON_ERROR), $expires);
     }
 
     public function count(): int

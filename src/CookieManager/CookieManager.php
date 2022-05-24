@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\CookieManager;
 
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,6 +66,10 @@ final class CookieManager implements CookieManagerInterface
 
     public function store(Response $response, Experiments $experiments): void
     {
-        $response->headers->setCookie($experiments->createCookie($this->cookieName));
+        $response->headers->setCookie(Cookie::create(
+            $this->cookieName,
+            json_encode($experiments, \JSON_THROW_ON_ERROR),
+            (new \DateTimeImmutable())->add(new \DateInterval('P1Y'))
+        ));
     }
 }
