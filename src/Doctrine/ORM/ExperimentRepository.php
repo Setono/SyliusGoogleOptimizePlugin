@@ -11,6 +11,7 @@ use Webmozart\Assert\Assert;
 
 class ExperimentRepository extends EntityRepository implements ExperimentRepositoryInterface
 {
+    // todo this query is really a good candidate for caching (at least for a small amount of time)
     public function findAll(bool $fetchJoinVariants = true): array
     {
         $qb = $this->createQueryBuilder('o');
