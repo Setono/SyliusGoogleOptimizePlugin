@@ -19,7 +19,7 @@
             <argument type="service" id="setono_sylius_google_optimize.context.cookie_based_variant.inner"/>
             <argument type="service" id="request_stack"/>
             <argument type="service" id="setono_sylius_google_optimize.provider.experiment"/>
-            <argument>%setono_sylius_google_optimize.cookie_name%</argument>
+            <argument type="service" id="setono_sylius_google_optimize.cookie_manager.default"/>
         </service>
 
         <service id="setono_sylius_google_optimize.context.bot_request_aware_variant"
