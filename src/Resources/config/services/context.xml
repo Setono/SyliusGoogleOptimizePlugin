@@ -22,6 +22,14 @@
             <argument>%setono_sylius_google_optimize.cookie_name%</argument>
         </service>
 
+        <service id="setono_sylius_google_optimize.context.bot_request_aware_variant"
+                 class="Setono\SyliusGoogleOptimizePlugin\Context\BotRequestAwareVariantContext"
+                 decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="48">
+            <argument type="service" id="setono_sylius_google_optimize.context.bot_request_aware_variant.inner"/>
+            <argument type="service" id="setono_bot_detection.bot_detector.default"/>
+            <argument type="service" id="setono_sylius_google_optimize.factory.variant"/>
+        </service>
+
         <service id="setono_sylius_google_optimize.context.memory_based_variant"
                  class="Setono\SyliusGoogleOptimizePlugin\Context\MemoryBasedVariantContext"
                  decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="32">

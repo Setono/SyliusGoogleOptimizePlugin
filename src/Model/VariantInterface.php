@@ -10,7 +10,12 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 interface VariantInterface extends ResourceInterface, CodeAwareInterface
 {
     /**
-     * This represents the code for original variants, which should be a reserved code
+     * This represents the position for original variants, which MUST be reserved for original variants
+     */
+    public const POSITION_ORIGINAL = 0;
+
+    /**
+     * This represents the code for original variants, which MUST be reserved for original variants
      */
     public const CODE_ORIGINAL = 'original';
 

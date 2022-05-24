@@ -34,4 +34,13 @@ final class VariantFactory implements VariantFactoryInterface
 
         return $obj;
     }
+
+    public function createOriginal(): VariantInterface
+    {
+        $obj = $this->createNew();
+        $obj->setCode(VariantInterface::CODE_ORIGINAL);
+        $obj->setPosition(VariantInterface::POSITION_ORIGINAL);
+
+        return $obj;
+    }
 }
