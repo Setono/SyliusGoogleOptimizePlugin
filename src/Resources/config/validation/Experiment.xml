@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<constraint-mapping xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns="http://symfony.com/schema/dic/constraint-mapping"
+                    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd">
+    <class name="Setono\SyliusGoogleOptimizePlugin\Model\Experiment">
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
+            <option name="fields">code</option>
+            <option name="groups">setono_sylius_google_optimize</option>
+        </constraint>
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
+            <option name="fields">googleExperimentId</option>
+            <option name="groups">setono_sylius_google_optimize</option>
+        </constraint>
+        <property name="code">
+            <constraint name="NotBlank">
+                <option name="groups">setono_sylius_google_optimize</option>
+            </constraint>
+        </property>
+        <property name="googleExperimentId">
+            <constraint name="NotBlank">
+                <option name="groups">setono_sylius_google_optimize</option>
+            </constraint>
+        </property>
+        <property name="variants">
+            <constraint name="Count">
+                <option name="min">2</option>
+                <option name="groups">setono_sylius_google_optimize</option>
+            </constraint>
+            <constraint name="Valid"/>
+        </property>
+    </class>
+</constraint-mapping>
