@@ -39,13 +39,6 @@ final class ExperimentProvider implements ExperimentProviderInterface
         return $this->experiments[$experiment];
     }
 
-    public function getAll(): array
-    {
-        $this->populate();
-
-        return $this->experiments;
-    }
-
     /**
      * @psalm-assert !null $this->experiments
      */

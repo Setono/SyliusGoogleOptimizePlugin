@@ -19,9 +19,4 @@ interface ExperimentProviderInterface
      * @throws \InvalidArgumentException if the experiment does not exist
      */
     public function getExperiment($experiment): ExperimentInterface;
-
-    /**
-     * @return array<int|string, ExperimentInterface>
-     */
-    public function getAll(): array;
 }
