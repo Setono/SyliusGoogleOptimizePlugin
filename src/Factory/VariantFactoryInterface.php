@@ -12,4 +12,6 @@ interface VariantFactoryInterface extends FactoryInterface
     public function createNew(): VariantInterface;
 
     public function createWithData(string $code, int $position): VariantInterface;
+
+    public function createOriginal(): VariantInterface;
 }
