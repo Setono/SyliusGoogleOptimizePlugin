@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Tests\Setono\SyliusGoogleOptimizePlugin\Context;
 
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Setono\SyliusGoogleOptimizePlugin\Context\CookieBasedVariantContext;
 use Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface;
+use Setono\SyliusGoogleOptimizePlugin\CookieManager\CookieManagerInterface;
+use Setono\SyliusGoogleOptimizePlugin\CookieManager\Experiment as ExperimentValueObject;
+use Setono\SyliusGoogleOptimizePlugin\CookieManager\Experiments;
 use Setono\SyliusGoogleOptimizePlugin\Model\Experiment;
 use Setono\SyliusGoogleOptimizePlugin\Model\Variant;
 use Setono\SyliusGoogleOptimizePlugin\Model\VariantInterface;
@@ -49,13 +53,10 @@ final class CookieBasedVariantContextTest extends TestCase
         $experimentProvider->hasExperiment(1)->willReturn(true);
         $experimentProvider->getExperiment(1)->willReturn($experiment);
 
-        $request = new Request([], [], [], [
-            self::COOKIE_NAME => '{"1": 2}',
-        ]);
+        $cookieManager = $this->prophesize(CookieManagerInterface::class);
+        $cookieManager->read(Argument::type(Request::class))->willReturn(new Experiments([new ExperimentValueObject(1, 2)]));
 
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $context = new CookieBasedVariantContext(self::getDecoratedContext(), $requestStack, $experimentProvider->reveal(), self::COOKIE_NAME);
+        $context = $this->getCookieBasedVariantContext(null, null, $experimentProvider->reveal(), $cookieManager->reveal());
 
         self::assertSame('variant_one', $context->getVariant('experiment')->getCode());
     }
@@ -65,8 +66,7 @@ final class CookieBasedVariantContextTest extends TestCase
      */
     public function it_returns_decorated_if_no_main_request_is_present(): void
     {
-        $experimentProvider = $this->prophesize(ExperimentProviderInterface::class);
-        $context = new CookieBasedVariantContext(self::getDecoratedContext(), new RequestStack(), $experimentProvider->reveal(), self::COOKIE_NAME);
+        $context = $this->getCookieBasedVariantContext(null, new RequestStack());
 
         self::assertSame('decorated', $context->getVariant('experiment')->getCode());
     }
@@ -74,71 +74,46 @@ final class CookieBasedVariantContextTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_decorated_if_cookie_is_not_set(): void
+    public function it_returns_decorated_if_no_cookies_are_set(): void
     {
-        $experimentProvider = $this->prophesize(ExperimentProviderInterface::class);
-        $requestStack = new RequestStack();
-        $requestStack->push(new Request());
-        $context = new CookieBasedVariantContext(self::getDecoratedContext(), $requestStack, $experimentProvider->reveal(), self::COOKIE_NAME);
+        $cookieManager = $this->prophesize(CookieManagerInterface::class);
+        $cookieManager->read(Argument::type(Request::class))->willReturn(new Experiments());
+
+        $context = $this->getCookieBasedVariantContext(null, null, null, $cookieManager->reveal());
 
         self::assertSame('decorated', $context->getVariant('experiment')->getCode());
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_decorated_if_cookie_value_is_invalid(): void
-    {
-        $experimentProvider = $this->prophesize(ExperimentProviderInterface::class);
+    private function getCookieBasedVariantContext(
+        VariantContextInterface $decoratedVariantContext = null,
+        RequestStack $requestStack = null,
+        ExperimentProviderInterface $experimentProvider = null,
+        CookieManagerInterface $cookieManager = null
+    ): CookieBasedVariantContext {
+        $decoratedVariantContext = $decoratedVariantContext ?? self::getDecoratedVariantContext();
 
-        $request = new Request([], [], [], [
-            self::COOKIE_NAME => 'invalid json',
-        ]);
+        if (null === $requestStack) {
+            $requestStack = new RequestStack();
+            $requestStack->push(new Request());
+        }
 
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $context = new CookieBasedVariantContext(self::getDecoratedContext(), $requestStack, $experimentProvider->reveal(), self::COOKIE_NAME);
+        if (null === $experimentProvider) {
+            $experimentProvider = $this->prophesize(ExperimentProviderInterface::class)->reveal();
+        }
 
-        self::assertSame('decorated', $context->getVariant('experiment')->getCode());
+        if (null === $cookieManager) {
+            $cookieManager = $this->prophesize(CookieManagerInterface::class)->reveal();
+        }
+
+        return new CookieBasedVariantContext(
+            $decoratedVariantContext,
+            $requestStack,
+            $experimentProvider,
+            $cookieManager
+        );
     }
 
-    /**
-     * @test
-     */
-    public function it_returns_decorated_if_decoded_cookie_value_is_not_an_array(): void
-    {
-        $experimentProvider = $this->prophesize(ExperimentProviderInterface::class);
-
-        $request = new Request([], [], [], [
-            self::COOKIE_NAME => '0',
-        ]);
-
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $context = new CookieBasedVariantContext(self::getDecoratedContext(), $requestStack, $experimentProvider->reveal(), self::COOKIE_NAME);
-
-        self::assertSame('decorated', $context->getVariant('experiment')->getCode());
-    }
-
-    /**
-     * @test
-     */
-    public function it_returns_decorated_if_decoded_cookie_value_is_not_as_expected(): void
-    {
-        $experimentProvider = $this->prophesize(ExperimentProviderInterface::class);
-
-        $request = new Request([], [], [], [
-            self::COOKIE_NAME => '{"string": "string"}',
-        ]);
-
-        $requestStack = new RequestStack();
-        $requestStack->push($request);
-        $context = new CookieBasedVariantContext(self::getDecoratedContext(), $requestStack, $experimentProvider->reveal(), self::COOKIE_NAME);
-
-        self::assertSame('decorated', $context->getVariant('experiment')->getCode());
-    }
-
-    private static function getDecoratedContext(): VariantContextInterface
+    private static function getDecoratedVariantContext(): VariantContextInterface
     {
         return new class() implements VariantContextInterface {
             public function getVariant(string $experiment): VariantInterface

@@ -5,28 +5,30 @@ declare(strict_types=1);
 namespace Setono\SyliusGoogleOptimizePlugin\EventSubscriber;
 
 use Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface;
+use Setono\SyliusGoogleOptimizePlugin\CookieManager\CookieManagerInterface;
+use Setono\SyliusGoogleOptimizePlugin\CookieManager\Experiment;
+use Setono\SyliusGoogleOptimizePlugin\CookieManager\Experiments;
 use Setono\SyliusGoogleOptimizePlugin\Repository\ExperimentRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 final class StoreExperimentsSubscriber implements EventSubscriberInterface
 {
+    private CookieManagerInterface $cookieManager;
+
     private ExperimentRepositoryInterface $experimentRepository;
 
     private VariantContextInterface $variantContext;
 
-    private string $cookieName;
-
     public function __construct(
+        CookieManagerInterface $cookieManager,
         ExperimentRepositoryInterface $experimentRepository,
-        VariantContextInterface $variantContext,
-        string $cookieName
+        VariantContextInterface $variantContext
     ) {
+        $this->cookieManager = $cookieManager;
         $this->experimentRepository = $experimentRepository;
         $this->variantContext = $variantContext;
-        $this->cookieName = $cookieName;
     }
 
     public static function getSubscribedEvents(): array
@@ -42,25 +44,17 @@ final class StoreExperimentsSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $experiments = [];
-        foreach ($this->experimentRepository->findRunning() as $experiment) {
-            // we save the experiment => variant array as an <int, int> array because it has the smallest footprint in terms of size
-            $experiments[(int) $experiment->getId()] = (int) $this->variantContext->getVariant((string) $experiment->getCode())->getId();
-        }
-
-        try {
-            $cookieValue = json_encode($experiments, \JSON_THROW_ON_ERROR);
-        } catch (\JsonException $e) {
+        $entities = $this->experimentRepository->findRunning();
+        if ([] === $entities) {
             return;
         }
 
-        $response = $event->getResponse();
-        $response->headers->setCookie(
-            Cookie::create(
-                $this->cookieName,
-                $cookieValue,
-                (new \DateTimeImmutable())->add(new \DateInterval('P1Y'))
-            )
-        );
+        $experiments = new Experiments();
+
+        foreach ($entities as $experiment) {
+            $experiments->add(new Experiment((int) $experiment->getId(), (int) $this->variantContext->getVariant((string) $experiment->getCode())->getId()));
+        }
+
+        $this->cookieManager->store($event->getResponse(), $experiments);
     }
 }

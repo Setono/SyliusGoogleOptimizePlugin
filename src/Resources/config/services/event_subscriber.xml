@@ -4,9 +4,9 @@
     <services>
         <service id="setono_sylius_google_optimize.event_subscriber.store_experiments"
                  class="Setono\SyliusGoogleOptimizePlugin\EventSubscriber\StoreExperimentsSubscriber">
+            <argument type="service" id="setono_sylius_google_optimize.cookie_manager.default"/>
             <argument type="service" id="setono_sylius_google_optimize.repository.experiment"/>
             <argument type="service" id="setono_sylius_google_optimize.context.variant"/>
-            <argument>%setono_sylius_google_optimize.cookie_name%</argument>
 
             <tag name="kernel.event_subscriber"/>
         </service>
