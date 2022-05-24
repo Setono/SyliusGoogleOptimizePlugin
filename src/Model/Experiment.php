@@ -89,7 +89,7 @@ class Experiment implements ExperimentInterface
             }
         }
 
-        throw new \RuntimeException('No original variant on this experiment');
+        throw new \LogicException('No original variant on this experiment');
     }
 
     public function addVariant(VariantInterface $variant): void
