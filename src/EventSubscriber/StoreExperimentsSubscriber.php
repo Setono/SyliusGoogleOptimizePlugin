@@ -52,7 +52,10 @@ final class StoreExperimentsSubscriber implements EventSubscriberInterface
         $experiments = new Experiments();
 
         foreach ($entities as $experiment) {
-            $experiments->add(new Experiment((int) $experiment->getId(), (int) $this->variantContext->getVariant((string) $experiment->getCode())->getId()));
+            $experiments->add(new Experiment(
+                (int) $experiment->getId(),
+                (int) $this->variantContext->getVariant((string) $experiment->getCode())->getId()
+            ));
         }
 
         $this->cookieManager->store($event->getResponse(), $experiments);
