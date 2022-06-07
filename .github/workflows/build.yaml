@@ -146,7 +146,7 @@ jobs:
                 run: "(cd tests/Application && bin/console cache:warmup)"
                 
             -   name: "Static analysis"
-                run: "composer analyse"
+                run: "vendor/bin/psalm --php-version=${{ matrix.php-version }}"
 
     unit-tests:
         name: "Unit tests (PHP ${{ matrix.php-version }} | Dependency versions: ${{ matrix.dependencies }} | Symfony: ${{ matrix.symfony }})"
