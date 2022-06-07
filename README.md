@@ -11,7 +11,7 @@ Integrate [Google Optimize](https://optimize.google.com) with your Sylius store 
 ## Installing the plugin
 
 ```shell
-composer require setono/sylius-cms-plugin
+composer require setono/sylius-google-optimize-plugin
 ```
 
 ## Enabling the plugin
