@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\Context;
 
-use Setono\SyliusGoogleOptimizePlugin\Exception\NonExistingExperimentException;
 use Setono\SyliusGoogleOptimizePlugin\Model\ExperimentInterface;
 use Setono\SyliusGoogleOptimizePlugin\Model\VariantInterface;
 use Setono\SyliusGoogleOptimizePlugin\Provider\ExperimentProviderInterface;
@@ -20,11 +19,7 @@ final class RandomVariantContext implements VariantContextInterface
 
     public function getVariant(string $experiment): VariantInterface
     {
-        if (!$this->experimentProvider->hasExperiment($experiment)) {
-            // todo an option could also be to return an instance of VariantInterface with the values we know that an original variant should have, i.e. position = 0 and code = original
-            throw NonExistingExperimentException::fromExperiment($experiment);
-        }
-
+        // todo an option could also be to return an instance of VariantInterface with the values we know that an original variant should have, i.e. position = 0 and code = original
         $obj = $this->experimentProvider->getExperiment($experiment);
 
         return self::getVariantFromExperiment($obj);

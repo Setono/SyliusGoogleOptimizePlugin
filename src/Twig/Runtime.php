@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\SyliusGoogleOptimizePlugin\Twig;
 
 use Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface;
+use Setono\SyliusGoogleOptimizePlugin\Exception\NonExistingExperimentException;
 use Twig\Extension\RuntimeExtensionInterface;
 
 final class Runtime implements RuntimeExtensionInterface
@@ -32,7 +33,7 @@ final class Runtime implements RuntimeExtensionInterface
 
         try {
             $variant = $this->variantContext->getVariant($experiment);
-        } catch (\InvalidArgumentException $e) {
+        } catch (NonExistingExperimentException $e) {
             return false;
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\Context;
 
+use Setono\SyliusGoogleOptimizePlugin\Exception\NonExistingExperimentException;
 use Setono\SyliusGoogleOptimizePlugin\Model\VariantInterface;
 
 interface VariantContextInterface
@@ -15,7 +16,7 @@ interface VariantContextInterface
      *
      * @param string $experiment Either the code or the Google experiment id
      *
-     * @throws \InvalidArgumentException if the experiment does not exist
+     * @throws NonExistingExperimentException if the experiment does not exist
      */
     public function getVariant(string $experiment): VariantInterface;
 }

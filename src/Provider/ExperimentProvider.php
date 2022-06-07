@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\Provider;
 
+use Setono\SyliusGoogleOptimizePlugin\Exception\NonExistingExperimentException;
 use Setono\SyliusGoogleOptimizePlugin\Model\ExperimentInterface;
 use Setono\SyliusGoogleOptimizePlugin\Repository\ExperimentRepositoryInterface;
 
@@ -33,7 +34,7 @@ final class ExperimentProvider implements ExperimentProviderInterface
     public function getExperiment($experiment): ExperimentInterface
     {
         if (!$this->hasExperiment($experiment)) {
-            throw new \InvalidArgumentException(sprintf('The experiment "%s" does not exist', $experiment));
+            throw NonExistingExperimentException::fromExperiment($experiment);
         }
 
         return $this->experiments[$experiment];
@@ -50,7 +51,7 @@ final class ExperimentProvider implements ExperimentProviderInterface
 
         $this->experiments = [];
 
-        foreach ($this->experimentRepository->findAll() as $experiment) {
+        foreach ($this->experimentRepository->findRunning() as $experiment) {
             $this->experiments[(int) $experiment->getId()] = $experiment;
             $this->experiments[(string) $experiment->getCode()] = $experiment;
             $this->experiments[(string) $experiment->getGoogleExperimentId()] = $experiment;
