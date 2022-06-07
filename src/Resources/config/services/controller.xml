@@ -8,6 +8,7 @@
                  class="Setono\SyliusGoogleOptimizePlugin\Controller\Action\PickWinnerAction">
             <argument type="service" id="setono_sylius_google_optimize.repository.experiment"/>
             <argument type="service" id="doctrine"/>
+            <argument type="service" id="router"/>
         </service>
     </services>
 </container>

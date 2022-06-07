@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class PickWinnerAction
 {
@@ -19,10 +20,16 @@ final class PickWinnerAction
 
     private RepositoryInterface $experimentRepository;
 
-    public function __construct(RepositoryInterface $experimentRepository, ManagerRegistry $managerRegistry)
-    {
+    private UrlGeneratorInterface $urlGenerator;
+
+    public function __construct(
+        RepositoryInterface $experimentRepository,
+        ManagerRegistry $managerRegistry,
+        UrlGeneratorInterface $urlGenerator
+    ) {
         $this->experimentRepository = $experimentRepository;
         $this->managerRegistry = $managerRegistry;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function __invoke(Request $request, int $experimentId, int $variantId): Response
@@ -39,7 +46,9 @@ final class PickWinnerAction
                 $manager = $this->getManager($experiment);
                 $manager->flush();
 
-                return new RedirectResponse($request->headers->get('referer') ?? '/admin');
+                return new RedirectResponse(
+                    $request->headers->get('referer') ?? $this->urlGenerator->generate('setono_sylius_google_optimize_admin_experiment_index')
+                );
             }
         }
 
