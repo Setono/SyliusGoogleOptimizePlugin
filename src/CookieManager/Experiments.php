@@ -9,7 +9,7 @@ namespace Setono\SyliusGoogleOptimizePlugin\CookieManager;
  */
 final class Experiments implements \Countable, \IteratorAggregate, \JsonSerializable
 {
-    /** @var list<Experiment> */
+    /** @var array<int, Experiment> */
     public array $experiments = [];
 
     /**
@@ -24,7 +24,7 @@ final class Experiments implements \Countable, \IteratorAggregate, \JsonSerializ
 
     public function add(Experiment $experiment): void
     {
-        $this->experiments[] = $experiment;
+        $this->experiments[$experiment->experiment] = $experiment;
     }
 
     public function count(): int

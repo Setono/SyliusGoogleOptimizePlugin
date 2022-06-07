@@ -10,6 +10,7 @@
         <import resource="services/form.xml"/>
         <import resource="services/menu.xml"/>
         <import resource="services/provider.xml"/>
+        <import resource="services/stack.xml"/>
         <import resource="services/twig.xml"/>
     </imports>
 </container>

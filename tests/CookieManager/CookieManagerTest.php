@@ -80,11 +80,11 @@ final class CookieManagerTest extends TestCase
 
         self::assertCount(2, $experiments);
 
-        $experiment1 = $experiments[0];
+        $experiment1 = $experiments[1];
         self::assertSame(1, $experiment1->experiment);
         self::assertSame(2, $experiment1->variant);
 
-        $experiment2 = $experiments[1];
+        $experiment2 = $experiments[3];
         self::assertSame(3, $experiment2->experiment);
         self::assertSame(10, $experiment2->variant);
     }

@@ -5,8 +5,7 @@
         <service id="setono_sylius_google_optimize.event_subscriber.set_analytics_property"
                  class="Setono\SyliusGoogleOptimizePlugin\EventSubscriber\SetAnalyticsPropertySubscriber">
             <argument type="service" id="setono_google_analytics_server_side_tracking.hit.hit_builder_stack"/>
-            <argument type="service" id="setono_sylius_google_optimize.repository.experiment"/>
-            <argument type="service" id="setono_sylius_google_optimize.context.variant"/>
+            <argument type="service" id="setono_sylius_google_optimize.stack.viewed_experiment"/>
 
             <tag name="kernel.event_subscriber"/>
         </service>

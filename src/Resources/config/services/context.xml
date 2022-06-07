@@ -30,9 +30,17 @@
             <argument type="service" id="setono_sylius_google_optimize.factory.variant"/>
         </service>
 
+        <service id="setono_sylius_google_optimize.context.tracking_variant"
+                 class="Setono\SyliusGoogleOptimizePlugin\Context\TrackingVariantContext"
+                 decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="32">
+            <argument type="service" id="setono_sylius_google_optimize.context.tracking_variant.inner"/>
+            <argument type="service" id="setono_sylius_google_optimize.provider.experiment"/>
+            <argument type="service" id="setono_sylius_google_optimize.stack.viewed_experiment"/>
+        </service>
+
         <service id="setono_sylius_google_optimize.context.memory_based_variant"
                  class="Setono\SyliusGoogleOptimizePlugin\Context\MemoryBasedVariantContext"
-                 decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="32">
+                 decorates="setono_sylius_google_optimize.context.random_variant" decoration-priority="16">
             <argument type="service" id="setono_sylius_google_optimize.context.memory_based_variant.inner"/>
         </service>
     </services>

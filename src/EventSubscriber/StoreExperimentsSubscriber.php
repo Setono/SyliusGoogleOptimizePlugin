@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\SyliusGoogleOptimizePlugin\EventSubscriber;
 
-use Setono\SyliusGoogleOptimizePlugin\Context\VariantContextInterface;
 use Setono\SyliusGoogleOptimizePlugin\CookieManager\CookieManagerInterface;
 use Setono\SyliusGoogleOptimizePlugin\CookieManager\Experiment;
-use Setono\SyliusGoogleOptimizePlugin\CookieManager\Experiments;
-use Setono\SyliusGoogleOptimizePlugin\Repository\ExperimentRepositoryInterface;
+use Setono\SyliusGoogleOptimizePlugin\Stack\ViewedExperimentStackInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -17,18 +15,14 @@ final class StoreExperimentsSubscriber implements EventSubscriberInterface
 {
     private CookieManagerInterface $cookieManager;
 
-    private ExperimentRepositoryInterface $experimentRepository;
-
-    private VariantContextInterface $variantContext;
+    private ViewedExperimentStackInterface $viewedExperimentStack;
 
     public function __construct(
         CookieManagerInterface $cookieManager,
-        ExperimentRepositoryInterface $experimentRepository,
-        VariantContextInterface $variantContext
+        ViewedExperimentStackInterface $viewedExperimentStack
     ) {
         $this->cookieManager = $cookieManager;
-        $this->experimentRepository = $experimentRepository;
-        $this->variantContext = $variantContext;
+        $this->viewedExperimentStack = $viewedExperimentStack;
     }
 
     public static function getSubscribedEvents(): array
@@ -40,22 +34,14 @@ final class StoreExperimentsSubscriber implements EventSubscriberInterface
 
     public function store(ResponseEvent $event): void
     {
-        if (!$event->isMasterRequest()) {
+        if (!$event->isMasterRequest() || $this->viewedExperimentStack->isEmpty()) {
             return;
         }
 
-        $entities = $this->experimentRepository->findRunning();
-        if ([] === $entities) {
-            return;
-        }
+        $experiments = $this->cookieManager->read();
 
-        $experiments = new Experiments();
-
-        foreach ($entities as $experiment) {
-            $experiments->add(new Experiment(
-                (int) $experiment->getId(),
-                (int) $this->variantContext->getVariant((string) $experiment->getCode())->getId()
-            ));
+        foreach ($this->viewedExperimentStack->all() as [$experiment, $variant]) {
+            $experiments->add(new Experiment((int) $experiment->getId(), (int) $variant->getId()));
         }
 
         $this->cookieManager->store($event->getResponse(), $experiments);
