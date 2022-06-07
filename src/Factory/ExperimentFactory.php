@@ -26,7 +26,7 @@ final class ExperimentFactory implements ExperimentFactoryInterface
         $obj = $this->decorated->createNew();
         Assert::isInstanceOf($obj, ExperimentInterface::class);
 
-        $obj->addVariant($this->variantFactory->createWithData('original', 0));
+        $obj->addVariant($this->variantFactory->createOriginal());
 
         return $obj;
     }
