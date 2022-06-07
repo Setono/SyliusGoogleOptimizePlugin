@@ -52,6 +52,6 @@ final class RandomVariantContext implements VariantContextInterface
             ++$i;
         }
 
-        throw new \LogicException('The number of variants in the experiment does not match the actual variants returned. This should not be possible.');
+        throw new \LogicException('The number of variants in the experiment does not match the actual variants returned by $experiment->getVariants(). This should not be possible.');
     }
 }
